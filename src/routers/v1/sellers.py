@@ -1,16 +1,24 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Response, status
-from icecream import ic
+
+# from icecream import ic
 from sqlalchemy import select
+from sqlalchemy.orm import load_only
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.configurations.database import get_async_session
 
-# from src.models.books import Book
+from src.models.books import Book
 from src.models.sellers import Seller
 
-from src.schemas import IncomingSeller, ReturnedAllSellers, ReturnedSeller
+from src.schemas import (
+    IncomingSeller,
+    UpdateSellerData,
+    ReturnedSeller,
+    ReturnedAllSellers,
+    ReturnedSellerFull,
+)
 
 sellers_router = APIRouter(tags=["sellers"], prefix="/sellers")
 
@@ -19,14 +27,8 @@ DBSession = Annotated[AsyncSession, Depends(get_async_session)]
 
 
 # Ручка для создания записи о seller в БД. Возвращает созданную seller.
-@sellers_router.post(
-    "/", response_model=ReturnedSeller, status_code=status.HTTP_201_CREATED
-)  # Прописываем модель ответа
-async def create_seller(
-    seller: IncomingSeller, session: DBSession
-):  # прописываем модель валидирующую входные данные и сессию как зависимость.
-    # это - бизнес логика. Обрабатываем данные, сохраняем, преобразуем и т.д.
-    # print("AAA")
+@sellers_router.post("/", response_model=ReturnedSeller, status_code=status.HTTP_201_CREATED)
+async def create_seller(seller: IncomingSeller, session: DBSession):
     new_seller = Seller(
         first_name=seller.first_name,
         second_name=seller.second_name,
@@ -39,48 +41,71 @@ async def create_seller(
     return new_seller
 
 
-# Ручка, возвращающая все книги
+# Ручка, возвращающая все seller
 @sellers_router.get("/", response_model=ReturnedAllSellers)
 async def get_all_sellers(session: DBSession):
-    # Хотим видеть формат:
-    # books: [{"id": 1, "title": "Blabla", ...}, {"id": 2, ...}]
     query = select(Seller)
     res = await session.execute(query)
     sellers = res.scalars().all()
     return {"sellers": sellers}
 
 
-# Ручка для получения книги по ее ИД
-@sellers_router.get("/{seller_id}", response_model=ReturnedSeller)
+# Ручка для получения seller по ее ИД
+@sellers_router.get("/{seller_id}", response_model=ReturnedSellerFull)
 async def get_seller(seller_id: int, session: DBSession):
-    res = await session.get(Seller, seller_id)
-    # res.password
-    return res
+    if seller := await session.get(Seller, seller_id):
+
+        book_cols_to_select = [
+            Book.id,
+            Book.title,
+            Book.author,
+            Book.year,
+            Book.count_pages,
+        ]
+        books = await session.execute(
+            select(Book)
+            .filter_by(seller_id=seller_id)
+            .options(
+                load_only(*book_cols_to_select),
+            )
+        )
+
+        res = {}
+        res["id"] = seller.id
+        res["first_name"] = seller.first_name
+        res["second_name"] = seller.second_name
+        res["email"] = seller.email
+        res["books"] = books.scalars().all()
+
+        return res
+
+    return Response(status_code=status.HTTP_404_NOT_FOUND)
 
 
-# Ручка для удаления книги
-@sellers_router.delete("/{seller_id}")
-async def delete_book(seller_id: int, session: DBSession):
-    deleted_seller = await session.get(Seller, seller_id)
-    ic(deleted_seller)  # Красивая и информативная замена для print. Полезна при отладке.
-    if deleted_seller:
-        await session.delete(deleted_seller)
-
-    return Response(status_code=status.HTTP_204_NO_CONTENT)  # Response может вернуть текст и метаданные.
-
-
-# Ручка для обновления данных о книге
-@sellers_router.put("/{seller_id}")
-async def update_seller(seller_id: int, new_data: ReturnedSeller, session: DBSession):
-    # Оператор "морж", позволяющий одновременно и присвоить значение и проверить его.
+# Ручка для обновления данных о seller
+@sellers_router.put("/{seller_id}", response_model=ReturnedSeller)
+async def update_seller(seller_id: int, new_data: UpdateSellerData, session: DBSession):
     if updated_seller := await session.get(Seller, seller_id):
         updated_seller.first_name = new_data.first_name
         updated_seller.second_name = new_data.second_name
         updated_seller.email = new_data.email
-        updated_seller.password = new_data.password
 
         await session.flush()
 
         return updated_seller
 
+    return Response(status_code=status.HTTP_404_NOT_FOUND)
+
+
+# Ручка для удаления seller
+@sellers_router.delete("/{seller_id}")
+async def delete_book(seller_id: int, session: DBSession):
+    if deleted_seller := await session.get(Seller, seller_id):
+        # ic(deleted_seller)
+        if deleted_seller:
+            await session.delete(deleted_seller)
+
+        return Response(
+            status_code=status.HTTP_204_NO_CONTENT
+        )  # Response может вернуть текст и метаданные.
     return Response(status_code=status.HTTP_404_NOT_FOUND)

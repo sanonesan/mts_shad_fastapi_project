@@ -5,7 +5,7 @@
 # поэтому перешел на этот плагин. Он тоже хорош :-)
 
 
-# Создаем продавца
+# Создаем продавца 1
 POST http://localhost:8000/api/v1/sellers/ HTTP/1.1
 content-type: application/json
 
@@ -15,24 +15,39 @@ content-type: application/json
     "email": "martiniden@gmail.com",
     "password": "test00"
 }
-
 ###
 
-
-# Создаем продавца
+# Создаем продавца 2
 POST http://localhost:8000/api/v1/sellers/ HTTP/1.1
 content-type: application/json
 
 {
-    "first_name": "Martinza",
-    "second_name": "Idenza",
-    "email": "martinidenza@gmail.com",
-    "password": "test"
+    "first_name": "Zen",
+    "second_name": "Pythonovich",
+    "email": "ZenPythonovich@gmail.com",
+    "password": "test01"
 }
 
 ###
 
-# Создаем книгу
+# Меняем продавца
+PUT http://localhost:8000/api/v1/sellers/1 HTTP/1.1
+content-type: application/json
+
+{
+    "first_name": "Martin",
+    "second_name": "Idenza",
+    "email": "martiniden@gmail.com"
+}
+
+###
+
+# Получаем список продавцoв
+GET http://localhost:8000/api/v1/sellers/ HTTP/1.1
+
+###
+
+# Создаем книгу 1
 POST http://localhost:8000/api/v1/books/ HTTP/1.1
 content-type: application/json
 
@@ -46,8 +61,55 @@ content-type: application/json
 
 ###
 
+# Создаем книгу 2
+POST http://localhost:8000/api/v1/books/ HTTP/1.1
+content-type: application/json
+
+{
+    "seller_id": 1,
+    "title": "Clean Code",
+    "author": "Robert Martin",
+    "pages": 104,
+    "year": 2007
+}
+
+###
+
+# Создаем книгу 1
+POST http://localhost:8000/api/v1/books/ HTTP/1.1
+content-type: application/json
+
+{
+    "seller_id": 3,
+    "title": "Wrong Code",
+    "author": "Robert Martin",
+    "pages": 104,
+    "year": 2007
+}
+
+###
+
+# Создаем книгу 2
+POST http://localhost:8000/api/v1/books/ HTTP/1.1
+content-type: application/json
+
+{
+    "seller_id": 2,
+    "title": "Clean Code",
+    "author": "Robert Martin",
+    "pages": 104,
+    "year": 2007
+}
+
+###
+
 # Получаем список продавцoв
 GET http://localhost:8000/api/v1/sellers/ HTTP/1.1
+
+###
+
+# Получаем список продавцoв
+GET http://localhost:8000/api/v1/sellers/2 HTTP/1.1
 
 ###
 
@@ -66,6 +128,7 @@ PUT http://localhost:8000/api/v1/books/1 HTTP/1.1
 content-type: application/json
 
 {
+    "seller_id": 1,
     "title": "Clean Code",
     "author": "Robert Martin",
     "count_pages": 10,
@@ -77,6 +140,12 @@ content-type: application/json
 
 # Удаляем книгу
 DELETE http://localhost:8000/api/v1/books/1 HTTP/1.1
+content-type: application/json
+
+###
+
+# Удаляем seller
+DELETE http://localhost:8000/api/v1/sellers/3 HTTP/1.1
 content-type: application/json
 
 ###

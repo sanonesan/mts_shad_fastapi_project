@@ -19,7 +19,9 @@ DBSession = Annotated[AsyncSession, Depends(get_async_session)]
 
 
 # Ручка для создания записи о книге в БД. Возвращает созданную книгу.
-@books_router.post("/", response_model=ReturnedBook, status_code=status.HTTP_201_CREATED)  # Прописываем модель ответа
+@books_router.post(
+    "/", response_model=ReturnedBook, status_code=status.HTTP_201_CREATED
+)  # Прописываем модель ответа
 async def create_book(
     book: IncomingBook, session: DBSession
 ):  # прописываем модель валидирующую входные данные и сессию как зависимость.
@@ -63,7 +65,9 @@ async def delete_book(book_id: int, session: DBSession):
     if deleted_book:
         await session.delete(deleted_book)
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)  # Response может вернуть текст и метаданные.
+    return Response(
+        status_code=status.HTTP_204_NO_CONTENT
+    )  # Response может вернуть текст и метаданные.
 
 
 # Ручка для обновления данных о книге

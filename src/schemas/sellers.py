@@ -1,7 +1,16 @@
 from pydantic import BaseModel, Field, field_validator
 from pydantic_core import PydanticCustomError
 
-__all__ = ["IncomingSeller", "ReturnedAllSellers", "ReturnedSeller"]
+
+from .books import ReturnedBookForSeller
+
+__all__ = [
+    "IncomingSeller",
+    "ReturnedAllSellers",
+    "ReturnedSeller",
+    "ReturnedSellerFull",
+    "UpdateSellerData",
+]
 
 
 # Базовый класс "Книги", содержащий поля, которые есть во всех классах-наследниках.
@@ -29,13 +38,28 @@ class IncomingSeller(BaseSeller):
     # pass
 
 
-# Класс, валидирующий исходящие данные. Он уже содержит id
-class ReturnedSeller(BaseModel):
+# Class for return info about seller by its id
+# to update info
+# do not change id in db
+class UpdateSellerData(BaseModel):
     first_name: str
     second_name: str
     email: str
 
 
-# Класс для возврата массива объектов "Книга"
+# Class for return info about seller by its id
+class ReturnedSeller(BaseModel):
+    id: int
+    first_name: str
+    second_name: str
+    email: str
+
+
+# Класс для возврата массива объектов Seller
 class ReturnedAllSellers(BaseModel):
     sellers: list[ReturnedSeller]
+
+
+# Class to return seller with his books
+class ReturnedSellerFull(ReturnedSeller):
+    books: list[ReturnedBookForSeller]
