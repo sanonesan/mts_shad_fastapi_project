@@ -12,7 +12,18 @@
 и может дать доступ к приложению злоумышленникам.
 """
 
+from pathlib import Path
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+SRC_DIR = Path(__file__).parent.parent
+
+
+class AuthJWT(BaseModel):
+    private_key_path: Path = SRC_DIR / "configurations" / "auth" / "certs" / "private.pem"
+    public_key_path: Path = SRC_DIR / "configurations" / "auth" / "certs" / "public.pem"
+    algorithm: str = "RS256"
 
 
 class Settings(BaseSettings):
@@ -21,6 +32,8 @@ class Settings(BaseSettings):
     db_name: str = "fastapi_project_db"
     db_test_name: str = "fastapi_project_test_db"
     max_connection_count: int = 10
+
+    auth_jwt: AuthJWT = AuthJWT()
 
     @property
     def database_url(self) -> str:

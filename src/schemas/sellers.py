@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core import PydanticCustomError
 
 
@@ -13,53 +13,66 @@ __all__ = [
 ]
 
 
-# Базовый класс "Книги", содержащий поля, которые есть во всех классах-наследниках.
 class BaseSeller(BaseModel):
+    """
+    Class with basic seller fields
+    """
+
     first_name: str
-    second_name: str
-    email: str
+    second_name: str | None = None
+    email: EmailStr
     password: str
 
 
-# Класс для валидации входящих данных. Не содержит id так как его присваивает БД.
 class IncomingSeller(BaseSeller):
-    first_name: str = "None"  # Пример присваивания дефолтного значения
-    second_name: str = "None"  # Пример присваивания дефолтного значения
-    email: str = "None"
-    password: str = "None"
+    """
+    Class for validation of entered seller data
+    """
 
-    @field_validator("password")  # Валидатор, проверяет что дата не слишком древняя
+    second_name: str | None = None
+
+    @field_validator("password")  # password validator
     @staticmethod
     def validate_password(val: str):
         if len(val) <= 4:
             raise PydanticCustomError("Validation error", "password is too short!")
         return val
 
-    # pass
 
-
-# Class for return info about seller by its id
-# to update info
-# do not change id in db
 class UpdateSellerData(BaseModel):
+    """
+    Class for return info about seller by its id
+    to update info
+    do not change id in db
+    """
+
     first_name: str
     second_name: str
-    email: str
+    email: EmailStr
 
 
-# Class for return info about seller by its id
 class ReturnedSeller(BaseModel):
+    """
+    Class for return info about seller by its id
+    """
+
     id: int
     first_name: str
     second_name: str
-    email: str
+    email: EmailStr
 
 
-# Класс для возврата массива объектов Seller
 class ReturnedAllSellers(BaseModel):
+    """
+    Class for return array of object Seller
+    """
+
     sellers: list[ReturnedSeller]
 
 
-# Class to return seller with his books
 class ReturnedSellerFull(ReturnedSeller):
+    """
+    Class to return seller with his books
+    """
+
     books: list[ReturnedBookForSeller]
