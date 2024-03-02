@@ -1,8 +1,5 @@
 from pydantic import BaseModel, EmailStr
 
-# from pydantic_core import PydanticCustomError
-
-
 from .books import ReturnedBookForSeller
 
 __all__ = [
@@ -20,8 +17,6 @@ class BaseSellerJWT(BaseModel):
     Class with basic seller fields
     """
 
-    # first_name: str
-    # second_name: str | None = None
     email: EmailStr
     password: str
 
@@ -31,25 +26,18 @@ class SignInSellerJWT(BaseSellerJWT):
     Class for seller registration data
     """
 
-    first_name: str
-    second_name: str | None = None
+    first_name: str = "None"
+    second_name: str = "None"
 
     pass
-
-    # second_name: str | None = None
-
-    # @field_validator("password")  # password validator
-    # @staticmethod
-    # def validate_password(val: str):
-    #     if len(val) <= 4:
-    #         raise PydanticCustomError("Validation error", "password is too short!")
-    #     return val
 
 
 class LogInSellerJWT(BaseSellerJWT):
     """
     Class seller log in
     """
+
+    id: int
 
     pass
 

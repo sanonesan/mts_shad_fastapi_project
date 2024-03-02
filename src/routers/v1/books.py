@@ -12,7 +12,7 @@ from src.models.books import Book
 
 from src.schemas import IncomingBook, ReturnedAllBooks, ReturnedBook
 
-books_router = APIRouter(tags=["books"], prefix="/books")
+books_router = APIRouter(tags=["nonJWT"], prefix="/books")
 
 # Больше не симулируем хранилище данных. Подключаемся к реальному, через сессию.
 DBSession = Annotated[AsyncSession, Depends(get_async_session)]

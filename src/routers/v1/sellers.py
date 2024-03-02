@@ -8,7 +8,6 @@ from sqlalchemy.orm import load_only
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.configurations.database import get_async_session
-from src.configurations.auth import utils as auth_utils
 
 from src.models.books import Book
 from src.models.sellers import Seller
@@ -22,7 +21,7 @@ from src.schemas import (
 )
 
 
-sellers_router = APIRouter(tags=["sellers"], prefix="/sellers")
+sellers_router = APIRouter(tags=["nonJWT"], prefix="/sellers")
 
 # Больше не симулируем хранилище данных. Подключаемся к реальному, через сессию.
 DBSession = Annotated[AsyncSession, Depends(get_async_session)]

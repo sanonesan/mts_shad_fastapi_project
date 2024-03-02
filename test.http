@@ -80,7 +80,7 @@ POST http://localhost:8000/api/v1/books/ HTTP/1.1
 content-type: application/json
 
 {
-    "seller_id": 3,
+    "seller_id": 2,
     "title": "Wrong Code",
     "author": "Robert Martin",
     "pages": 104,
@@ -145,7 +145,7 @@ content-type: application/json
 ###
 
 # Удаляем seller
-DELETE http://localhost:8000/api/v1/sellers/3 HTTP/1.1
+DELETE http://localhost:8000/api/v1/sellers/2 HTTP/1.1
 content-type: application/json
 
 ###
