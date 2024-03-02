@@ -1,8 +1,6 @@
-# Набор тестов для эндпоинтов которые можно запустить
+# Набор тестов для JWT эндпоинтов которые можно запустить
 # в VSCode с помощью плагина  REST Client
 # Найти можно по идентификатору: humao.rest-client
-# Tunder Client не позволяет свободно импортировать-экспортировать записи,
-# поэтому перешел на этот плагин. Он тоже хорош :-)
 
 
 # Регистрируем продавца 1
@@ -29,9 +27,9 @@ email=martiniden@gmail.com
 POST http://localhost:8000/api/v1/jwt/signup HTTP/1.1
 content-type: application/x-www-form-urlencoded
 
-email=lupythonovich@gmail.com
+email=zenpythonovich@gmail.com
 &password=test
-&first_name=Luther
+&first_name=Zen
 &second_name=Pythonovich
 
 ###
@@ -40,7 +38,7 @@ email=lupythonovich@gmail.com
 POST http://localhost:8000/api/v1/jwt/login HTTP/1.1
 content-type: application/x-www-form-urlencoded
 
-email=lupythonovich@gmail.com
+email=zenpythonovich@gmail.com
 &password=test
 
 ###

@@ -12,7 +12,7 @@ from src.models.books import Book
 
 from src.schemas import IncomingBook, ReturnedAllBooks, ReturnedBook
 
-books_router = APIRouter(tags=["nonJWT"], prefix="/books")
+books_router = APIRouter(tags=["nonJWT"], prefix="/nonjwt/books")
 
 # Больше не симулируем хранилище данных. Подключаемся к реальному, через сессию.
 DBSession = Annotated[AsyncSession, Depends(get_async_session)]
@@ -20,7 +20,9 @@ DBSession = Annotated[AsyncSession, Depends(get_async_session)]
 
 # Ручка для создания записи о книге в БД. Возвращает созданную книгу.
 @books_router.post(
-    "/", response_model=ReturnedBook, status_code=status.HTTP_201_CREATED
+    "/",
+    response_model=ReturnedBook,
+    status_code=status.HTTP_201_CREATED,
 )  # Прописываем модель ответа
 async def create_book(
     book: IncomingBook, session: DBSession
@@ -72,7 +74,7 @@ async def delete_book(book_id: int, session: DBSession):
 
 # Ручка для обновления данных о книге
 @books_router.put("/{book_id}")
-async def update_book(book_id: int, new_data: ReturnedBook, session: DBSession):
+async def update_book(book_id: int, new_data: IncomingBook, session: DBSession):
     # Оператор "морж", позволяющий одновременно и присвоить значение и проверить его.
     if updated_book := await session.get(Book, book_id):
         updated_book.seller_id = new_data.seller_id

@@ -21,7 +21,7 @@ from src.schemas import (
 )
 
 
-sellers_router = APIRouter(tags=["nonJWT"], prefix="/sellers")
+sellers_router = APIRouter(tags=["nonJWT"], prefix="/nonjwt/sellers")
 
 # Больше не симулируем хранилище данных. Подключаемся к реальному, через сессию.
 DBSession = Annotated[AsyncSession, Depends(get_async_session)]
