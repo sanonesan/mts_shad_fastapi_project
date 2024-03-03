@@ -1,0 +1,171 @@
+# Набор тестов для JWT эндпоинтов которые можно запустить
+# в VSCode с помощью плагина  REST Client
+# Найти можно по идентификатору: humao.rest-client
+
+
+# Регистрируем продавца 1
+POST http://localhost:8000/api/v1/jwt/signup HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+email=martiniden@gmail.com
+&password=test
+&first_name=Martin
+&second_name=Iden
+
+###
+
+# Получим токен продавца 1
+POST http://localhost:8000/api/v1/jwt/login HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+email=martiniden@gmail.com
+&password=test
+
+###
+
+# Регистрируем продавца 2
+POST http://localhost:8000/api/v1/jwt/signup HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+email=zenpythonovich@gmail.com
+&password=test
+&first_name=Zen
+&second_name=Pythonovich
+
+###
+
+# Получим токен продавца 2
+POST http://localhost:8000/api/v1/jwt/login HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+email=zenpythonovich@gmail.com
+&password=test
+
+###
+
+
+# Меняем данные продавца 1
+PUT http://localhost:8000/api/v1/jwt/sellers/me/info/update HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcnRpbmlkZW5AZ21haWwuY29tIiwic2VsbGVyX2lkIjoxfQ.jf3EoSk4oXFmZU03iNo-2Oqqi5qKstBclmWiMe6-_epFuW1UHTISwLORlDNJfpFXBSOhPxC375lKE7g-NRoVEgt2Zc_7EBSWGWSC-3nf15ACpUEn98Dndonxarw6fCD62H3qMeWzbwFfl--fX7SptOuNisSIcbBFNCtMxlrcU20A8zpi9V_lEEPqoolpvpeSunnkjqPffF-cRsBOTUObe_pDZO1hp6xBKm5F7FqvF5ABN2Gm-Z5IV3d3SCJm6YBSNd0ALFz_JEoTe97JNAc69s8iNjTtO6zDgVEPO38NKjcWx_Ks51m7gCQa0S9b8T2qkl7QWuGfK5FAUS8Q9RwLnQ
+content-type: application/x-www-form-urlencoded
+
+email=martinidenza@gmail.com
+&first_name=Matrin
+&second_name=Idenza
+###
+
+# Получаем список всех продавцoв
+GET http://localhost:8000/api/v1/jwt/sellers/list HTTP/1.1
+
+###
+
+# Создаем книгу 1 для продавца 1
+POST http://localhost:8000/api/v1/jwt/sellers/me/books/add HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcnRpbmlkZW5AZ21haWwuY29tIiwic2VsbGVyX2lkIjoxfQ.jf3EoSk4oXFmZU03iNo-2Oqqi5qKstBclmWiMe6-_epFuW1UHTISwLORlDNJfpFXBSOhPxC375lKE7g-NRoVEgt2Zc_7EBSWGWSC-3nf15ACpUEn98Dndonxarw6fCD62H3qMeWzbwFfl--fX7SptOuNisSIcbBFNCtMxlrcU20A8zpi9V_lEEPqoolpvpeSunnkjqPffF-cRsBOTUObe_pDZO1hp6xBKm5F7FqvF5ABN2Gm-Z5IV3d3SCJm6YBSNd0ALFz_JEoTe97JNAc69s8iNjTtO6zDgVEPO38NKjcWx_Ks51m7gCQa0S9b8T2qkl7QWuGfK5FAUS8Q9RwLnQ
+content-type: application/x-www-form-urlencoded
+
+title=Wrong Code
+&author=Robert Martin
+&count_pages=104
+&year=2007
+
+###
+
+# Создаем книгу 2 для продавца 1
+POST http://localhost:8000/api/v1/jwt/sellers/me/books/add HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcnRpbmlkZW5AZ21haWwuY29tIiwic2VsbGVyX2lkIjoxfQ.jf3EoSk4oXFmZU03iNo-2Oqqi5qKstBclmWiMe6-_epFuW1UHTISwLORlDNJfpFXBSOhPxC375lKE7g-NRoVEgt2Zc_7EBSWGWSC-3nf15ACpUEn98Dndonxarw6fCD62H3qMeWzbwFfl--fX7SptOuNisSIcbBFNCtMxlrcU20A8zpi9V_lEEPqoolpvpeSunnkjqPffF-cRsBOTUObe_pDZO1hp6xBKm5F7FqvF5ABN2Gm-Z5IV3d3SCJm6YBSNd0ALFz_JEoTe97JNAc69s8iNjTtO6zDgVEPO38NKjcWx_Ks51m7gCQa0S9b8T2qkl7QWuGfK5FAUS8Q9RwLnQ
+content-type: application/x-www-form-urlencoded
+
+title=Clean Code
+&author=Robert Martin
+&count_pages=104
+&year=2007
+
+###
+
+# Создаем книгу 1 для продавца 2
+POST http://localhost:8000/api/v1/jwt/sellers/me/books/add HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1cHl0aG9ub3ZpY2hAZ21haWwuY29tIiwic2VsbGVyX2lkIjoyfQ.BA5dDGb26sxfrk_If7ZtEOIW6_be32mnQ3itjWxGBeNdwsOGUqiD40MiQKryViXSfgBB52HwGoqn1cZO35W59qKNgmPlUkjMNiWVmvZuMbUQQl1mkPcvF3ZqIcaZZLZweQG3tQaXgeaXwE2pWMV2mWaiDQxOHwr_qVJJWCp375qXfQwncxZ64e4f1JyqdHS0JONg9lo6JgN3ykUSmexjvcohqYXbc0EMkmLayw-tO6xjpdfbF6zy4oQqAs1kNkv1flmmcviU8BW3fxY_nUajNjkqQfiYjMQIT3EymXpCYyG-L3qLrQR89lMB_x1sP31W3v6CG4oAXG6MN5_uz4F66w
+content-type: application/x-www-form-urlencoded
+
+title=Do Did Done
+&author=Good Person
+&count_pages=78
+&year=2020
+
+###
+
+# Создаем книгу 2 для продавца 2
+POST http://localhost:8000/api/v1/jwt/sellers/me/books/add HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1cHl0aG9ub3ZpY2hAZ21haWwuY29tIiwic2VsbGVyX2lkIjoyfQ.BA5dDGb26sxfrk_If7ZtEOIW6_be32mnQ3itjWxGBeNdwsOGUqiD40MiQKryViXSfgBB52HwGoqn1cZO35W59qKNgmPlUkjMNiWVmvZuMbUQQl1mkPcvF3ZqIcaZZLZweQG3tQaXgeaXwE2pWMV2mWaiDQxOHwr_qVJJWCp375qXfQwncxZ64e4f1JyqdHS0JONg9lo6JgN3ykUSmexjvcohqYXbc0EMkmLayw-tO6xjpdfbF6zy4oQqAs1kNkv1flmmcviU8BW3fxY_nUajNjkqQfiYjMQIT3EymXpCYyG-L3qLrQR89lMB_x1sP31W3v6CG4oAXG6MN5_uz4F66w
+content-type: application/x-www-form-urlencoded
+
+title=Rich Dad Poor Dad
+&author=Robert T. Kiyosaki & Sharon Lechter
+&count_pages=207
+&year=1997
+
+###
+
+
+# Получить информацию об авторизованном по токену продавце 1
+GET http://localhost:8000/api/v1/jwt/sellers/me/info HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcnRpbmlkZW5AZ21haWwuY29tIiwic2VsbGVyX2lkIjoxfQ.jf3EoSk4oXFmZU03iNo-2Oqqi5qKstBclmWiMe6-_epFuW1UHTISwLORlDNJfpFXBSOhPxC375lKE7g-NRoVEgt2Zc_7EBSWGWSC-3nf15ACpUEn98Dndonxarw6fCD62H3qMeWzbwFfl--fX7SptOuNisSIcbBFNCtMxlrcU20A8zpi9V_lEEPqoolpvpeSunnkjqPffF-cRsBOTUObe_pDZO1hp6xBKm5F7FqvF5ABN2Gm-Z5IV3d3SCJm6YBSNd0ALFz_JEoTe97JNAc69s8iNjTtO6zDgVEPO38NKjcWx_Ks51m7gCQa0S9b8T2qkl7QWuGfK5FAUS8Q9RwLnQ
+
+###
+
+
+# Получить информацию об авторизованном по токену продавце 2
+GET http://localhost:8000/api/v1/jwt/sellers/me/info HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1cHl0aG9ub3ZpY2hAZ21haWwuY29tIiwic2VsbGVyX2lkIjoyfQ.BA5dDGb26sxfrk_If7ZtEOIW6_be32mnQ3itjWxGBeNdwsOGUqiD40MiQKryViXSfgBB52HwGoqn1cZO35W59qKNgmPlUkjMNiWVmvZuMbUQQl1mkPcvF3ZqIcaZZLZweQG3tQaXgeaXwE2pWMV2mWaiDQxOHwr_qVJJWCp375qXfQwncxZ64e4f1JyqdHS0JONg9lo6JgN3ykUSmexjvcohqYXbc0EMkmLayw-tO6xjpdfbF6zy4oQqAs1kNkv1flmmcviU8BW3fxY_nUajNjkqQfiYjMQIT3EymXpCYyG-L3qLrQR89lMB_x1sP31W3v6CG4oAXG6MN5_uz4F66w
+
+###
+
+
+# Меняем данные книги 1 для продавца 2
+PUT http://localhost:8000/api/v1/jwt/sellers/me/books/3/update HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1cHl0aG9ub3ZpY2hAZ21haWwuY29tIiwic2VsbGVyX2lkIjoyfQ.BA5dDGb26sxfrk_If7ZtEOIW6_be32mnQ3itjWxGBeNdwsOGUqiD40MiQKryViXSfgBB52HwGoqn1cZO35W59qKNgmPlUkjMNiWVmvZuMbUQQl1mkPcvF3ZqIcaZZLZweQG3tQaXgeaXwE2pWMV2mWaiDQxOHwr_qVJJWCp375qXfQwncxZ64e4f1JyqdHS0JONg9lo6JgN3ykUSmexjvcohqYXbc0EMkmLayw-tO6xjpdfbF6zy4oQqAs1kNkv1flmmcviU8BW3fxY_nUajNjkqQfiYjMQIT3EymXpCYyG-L3qLrQR89lMB_x1sP31W3v6CG4oAXG6MN5_uz4F66w
+content-type: application/x-www-form-urlencoded
+
+author=Very Good Person
+&count_pages=99
+
+###
+
+
+# Удалим книгу 1 для продавца 1
+DELETE http://localhost:8000/api/v1/jwt/sellers/me/books/1/delete_book HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcnRpbmlkZW5AZ21haWwuY29tIiwic2VsbGVyX2lkIjoxfQ.jf3EoSk4oXFmZU03iNo-2Oqqi5qKstBclmWiMe6-_epFuW1UHTISwLORlDNJfpFXBSOhPxC375lKE7g-NRoVEgt2Zc_7EBSWGWSC-3nf15ACpUEn98Dndonxarw6fCD62H3qMeWzbwFfl--fX7SptOuNisSIcbBFNCtMxlrcU20A8zpi9V_lEEPqoolpvpeSunnkjqPffF-cRsBOTUObe_pDZO1hp6xBKm5F7FqvF5ABN2Gm-Z5IV3d3SCJm6YBSNd0ALFz_JEoTe97JNAc69s8iNjTtO6zDgVEPO38NKjcWx_Ks51m7gCQa0S9b8T2qkl7QWuGfK5FAUS8Q9RwLnQ
+content-type: application/x-www-form-urlencoded
+
+###
+
+
+# Удалим данные продавца 2
+DELETE http://localhost:8000/api/v1/jwt/sellers/me/delete_account HTTP/1.1
+# Authorization: Bearer jwt_token
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1cHl0aG9ub3ZpY2hAZ21haWwuY29tIiwic2VsbGVyX2lkIjoyfQ.BA5dDGb26sxfrk_If7ZtEOIW6_be32mnQ3itjWxGBeNdwsOGUqiD40MiQKryViXSfgBB52HwGoqn1cZO35W59qKNgmPlUkjMNiWVmvZuMbUQQl1mkPcvF3ZqIcaZZLZweQG3tQaXgeaXwE2pWMV2mWaiDQxOHwr_qVJJWCp375qXfQwncxZ64e4f1JyqdHS0JONg9lo6JgN3ykUSmexjvcohqYXbc0EMkmLayw-tO6xjpdfbF6zy4oQqAs1kNkv1flmmcviU8BW3fxY_nUajNjkqQfiYjMQIT3EymXpCYyG-L3qLrQR89lMB_x1sP31W3v6CG4oAXG6MN5_uz4F66w
+content-type: application/x-www-form-urlencoded
+
+
+###
+
+# Получить список всех книг
+GET  http://localhost:8000/api/v1/jwt/books/list HTTP/1.1
+
+###
+
+
+# Получить кнугу с id = 2
+GET  http://localhost:8000/api/v1/jwt/books/2 HTTP/1.1
+
+###
