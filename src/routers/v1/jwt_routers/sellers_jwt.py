@@ -30,7 +30,7 @@ seller_jwt_router = APIRouter(tags=["JWT"], prefix="/jwt")
 
 
 @seller_jwt_router.post(
-    "/signup/", response_model=ReturnedSellerJWT, status_code=status.HTTP_201_CREATED
+    "/signup", response_model=ReturnedSellerJWT, status_code=status.HTTP_201_CREATED
 )
 async def register_seller_jwt(
     seller: SignInSellerJWT = Depends(validate_registration_user),
@@ -51,7 +51,7 @@ async def register_seller_jwt(
     return new_seller_jwt
 
 
-@seller_jwt_router.post("/login/", response_model=TokenInfo)
+@seller_jwt_router.post("/login", response_model=TokenInfo)
 async def auth_seller_jwt(
     seller: LogInSellerJWT = Depends(validate_auth_user),
 ):
@@ -67,7 +67,7 @@ async def auth_seller_jwt(
     return TokenInfo(access_token=token, token_type="Bearer")
 
 
-@seller_jwt_router.get("/sellers/me/info/", response_model=ReturnedSellerJWTFull)
+@seller_jwt_router.get("/sellers/me/info", response_model=ReturnedSellerJWTFull)
 async def auth_seller_jwt_check_self_info(
     seller: ReturnedSellerJWTFull = Depends(get_current_auth_seller_full),
 ):
@@ -77,7 +77,7 @@ async def auth_seller_jwt_check_self_info(
     return seller
 
 
-@seller_jwt_router.put("/sellers/me/info/update/", response_model=ReturnedSellerJWT)
+@seller_jwt_router.put("/sellers/me/info/update", response_model=ReturnedSellerJWT)
 async def update_seller_jwt(
     email: None | EmailStr = Form(default=None),
     first_name: None | str = Form(default=None),
@@ -102,23 +102,19 @@ async def update_seller_jwt(
     return seller
 
 
-@seller_jwt_router.delete("/sellers/me/delete_account/")
+@seller_jwt_router.delete("/sellers/me/delete_account")
 async def delete_seller_jwt(
-    confirmation: None | str = Form(default=None),
     seller: ReturnedSellerJWT = Depends(get_current_auth_seller),
     session=Depends(get_async_session),
 ):
     """
     Handle to delete current authorized seller from DB. Seller's books will be deteted too.
-
-    To confirm operation enter "YES"
     """
-    if confirmation == "YES":
-        await session.delete(seller)
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    await session.delete(seller)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@seller_jwt_router.get("/sellers/list/", response_model=ReturnedAllSellersJWT)
+@seller_jwt_router.get("/sellers/list", response_model=ReturnedAllSellersJWT)
 async def get_all_sellers_jwt(
     session=Depends(get_async_session),
 ):

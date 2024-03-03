@@ -9,6 +9,10 @@ from src.models import sellers
 # Тест создание продавцов
 @pytest.mark.asyncio
 async def test_create_sellers(db_session, async_client):
+    """
+    Create sellers
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     data = {
@@ -49,6 +53,9 @@ async def test_create_sellers(db_session, async_client):
 # Тест меняем продавца
 @pytest.mark.asyncio
 async def test_update_sellers(db_session, async_client):
+    """
+    update seller
+    """
     await db_session.execute(delete(sellers.Seller))
 
     seller = sellers.Seller(
@@ -75,6 +82,10 @@ async def test_update_sellers(db_session, async_client):
 # Тест получить список продавцoв
 @pytest.mark.asyncio
 async def test_get_sellers(db_session, async_client):
+    """
+    Get seller list
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -116,6 +127,10 @@ async def test_get_sellers(db_session, async_client):
 # Создаем книгу для продавца
 @pytest.mark.asyncio
 async def test_create_book_for_seller(db_session, async_client):
+    """
+    Create book for seller
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -147,9 +162,14 @@ async def test_create_book_for_seller(db_session, async_client):
         "year": 2007,
     }
 
+
 # Книгу по id
 @pytest.mark.asyncio
 async def test_get_book_by_id(db_session, async_client):
+    """
+    Get book by id
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -189,6 +209,10 @@ async def test_get_book_by_id(db_session, async_client):
 # Получение информации о продавце (с книгами)
 @pytest.mark.asyncio
 async def test_get_seller_info(db_session, async_client):
+    """
+    Get seller info by id
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -246,9 +270,14 @@ async def test_get_seller_info(db_session, async_client):
         ],
     }
 
+
 # Получить cписок всех книг
 @pytest.mark.asyncio
 async def test_get_all_books(db_session, async_client):
+    """
+    Get list of books
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -308,6 +337,10 @@ async def test_get_all_books(db_session, async_client):
 # Изменить книгу
 @pytest.mark.asyncio
 async def test_update_book(db_session, async_client):
+    """
+    update book's info
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -336,7 +369,7 @@ async def test_update_book(db_session, async_client):
         "title": "Clean Code",
         "author": "Robert Martin",
         "pages": 104,
-        "year": 2007
+        "year": 2007,
     }
 
     response = await async_client.put(f"/api/v1/nonjwt/books/{book_1.id}", json=data)
@@ -351,9 +384,14 @@ async def test_update_book(db_session, async_client):
         "count_pages": 104,
     }
 
+
 # Удалить книгу
 @pytest.mark.asyncio
 async def test_delete_book(db_session, async_client):
+    """
+    Delete books info
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -408,9 +446,14 @@ async def test_delete_book(db_session, async_client):
         ],
     }
 
+
 # Удалить продавца
 @pytest.mark.asyncio
 async def test_delete_seller(db_session, async_client):
+    """
+    Delete seller info (with its books)
+    """
+
     await db_session.execute(delete(sellers.Seller))
 
     seller_1 = sellers.Seller(
@@ -472,4 +515,3 @@ async def test_delete_seller(db_session, async_client):
     all_books = await db_session.execute(select(books.Book))
     res = all_books.scalars().all()
     assert len(res) == 2
-

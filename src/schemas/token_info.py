@@ -4,5 +4,9 @@ __all__ = ["TokenInfo"]
 
 
 class TokenInfo(BaseModel):
+    """
+    Class with token info
+    """
+
     access_token: str
     token_type: str
